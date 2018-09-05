@@ -17,7 +17,11 @@ import org.usfirst.frc3617.Eugene.Robot;
  *
  */
 public class Driver extends Command {
-
+	
+	private double x;
+	private double y;
+	private double stickY;
+	private double stickX;
     public Driver() {
 
     }
@@ -25,12 +29,15 @@ public class Driver extends Command {
     // Called just before this Command runs the first time
     @Override
     protected void initialize() {
+    	x = 0;
+    	y = 0;
     }
 
     // Called repeatedly when this Command is scheduled to run
     @Override
     protected void execute() {
-    	
+    	stickY = Robot.oi.getLeftStick().getY();
+    	stickX = Robot.oi.getLeftStick().getX();
     	//arm tilt code
     	Robot.robotMap.getSpark5().set(Robot.oi.getRightStick().getY());
     	
@@ -49,8 +56,33 @@ public class Driver extends Command {
     		Robot.robotMap.getSpark4().set(0.3);
     	else
     		Robot.robotMap.getSpark4().set(0);
-    	
-    	
+    	//y Stepper
+    	if((y > 0 && stickY < y) || (y < 0 && stickY > y))
+    	{
+    		y = stickY;
+    	}
+    	else if(stickY < -0.1  && y > stickY)
+    	{
+    		y -= 0.2;
+    	}
+    	else if(stickY > 0.1  && y < stickY)
+    	{
+    		y += 0.2;
+    	}
+    	//x Stepper
+    	if((x > 0 && stickX < x) || (x < 0 && stickX > x))
+    	{
+    		x = stickX;
+    	}
+    	else if(stickX < -0.1  && x > stickX)
+    	{
+    		x -= 0.2;
+    	}
+    	else if(stickX > 0.1  && x < stickX)
+    	{
+    		x += 0.2;
+    	}
+    	//actual driving
     	
     }
 
